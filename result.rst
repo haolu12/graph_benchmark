@@ -5,13 +5,16 @@ Rapids Benchmark Result:
 1. Data Set:
 **************************
 This Data set will be used to benchmark all other libs.
+
 .. image:: https://github.com/haolu12/graph_benchmark/blob/main/input.png
 
 2. Single GPU results:
 	Below is the exact run-time of various cuGraph kernels. For the sake of performance measurement, I have converted the directed graph into undirected graph. The non-zero will be total number bi-directional edgs*2.
+
 .. image:: https://github.com/haolu12/graph_benchmark/blob/main/runtime.png
 
 To better understand the performance, we pick to look at Million edges per seconds measurement, since most of the algorithm here are implemented with O(m) complexity.
+
 .. image:: https://github.com/haolu12/graph_benchmark/blob/main/performance.png
 
 Before the RMM memory limited is reached Load+Cons can achieve up to 17M edges/Sec. In my opinion RMM is having trouble due to the renumbering function.
@@ -20,6 +23,7 @@ I my opinion cuGraph on single node is suite for fast turnaround development on 
 
 2. Multi GPU results:
 	Current cugraph version (0.18) has limited support on multi gpus kernel. The result does not seem to be good for any kind of further investigation. The file loading and graph construction phase stop scaling after 4 workers. Pagerank is either issue with single GPU or it never scale beyond 1 gpu. Betweenness centrality is scaling well up to 5 workers; the chart may seem super linear scaling, but it does not. Different from Pangerank and Load+Cons, batch node also participated in the computation of Betweeness centrality, which mean 2 workers = 3 GPUs.
+
 .. image:: https://github.com/haolu12/graph_benchmark/blob/main/distributed.png
 
 Bug Notes (RMM):
